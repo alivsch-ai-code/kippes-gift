@@ -10,7 +10,6 @@
             --primary: #2AABEE;
             --glass-bg: rgba(20, 20, 20, 0.65);
             --glass-border: rgba(255, 255, 255, 0.12);
-            --player-bg: rgba(10, 10, 10, 0.85);
         }
 
         body, html {
@@ -22,7 +21,83 @@
             -webkit-tap-highlight-color: transparent;
             padding-bottom: 120px; 
             scroll-behavior: smooth;
+            transition: filter 2s ease;
         }
+
+        /* --- WODKA MODUS --- */
+        body.drunk-mode {
+            filter: blur(1.5px) contrast(1.2);
+            animation: drunkWobble 5s infinite ease-in-out;
+        }
+        @keyframes drunkWobble {
+            0% { transform: rotate(0deg) translate(0,0); }
+            25% { transform: rotate(1deg) translate(2px, 2px); }
+            50% { transform: rotate(-1deg) translate(-2px, 1px); }
+            75% { transform: rotate(0.5deg) translate(1px, -2px); }
+            100% { transform: rotate(0deg) translate(0,0); }
+        }
+
+        /* --- NEU: TOP NAV BAR (MENÜ OBEN) --- */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: auto;
+            min-height: 60px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            z-index: 7000; /* Höher als alles andere */
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 5px;
+            padding-top: max(10px, env(safe-area-inset-top)); /* Rücksicht auf iPhone Notch */
+            box-sizing: border-box;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            transition: all 0.2s;
+            min-width: 70px;
+            position: relative;
+        }
+        
+        .nav-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.25); }
+        
+        .nav-icon { font-size: 1.2rem; display: block; }
+        
+        .wodka-active { background: #ff4757 !important; border-color: #ff4757 !important; box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
+
+        /* Wenik Animation (angepasst: fällt jetzt nach UNTEN) */
+        .leaf-particle {
+            position: absolute;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 8000;
+            animation: floatDown 1.5s ease-out forwards;
+        }
+        @keyframes floatDown {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(150px) rotate(180deg); opacity: 0; }
+        }
+
+        /* Hit Badge im Button */
+        .hit-badge {
+            position: absolute; top: -5px; right: -5px;
+            background: #2AABEE; color: white;
+            font-size: 0.65rem; padding: 2px 6px; border-radius: 10px;
+            font-weight: bold; border: 1px solid #000;
+        }
+
 
         /* --- VIDEO CONTAINER --- */
         .video-section {
@@ -46,6 +121,7 @@
         .content-overlay {
             position: relative; z-index: 2; padding: 25px;
             width: 100%; max-width: 1000px; box-sizing: border-box;
+            padding-top: 80px; /* Platz für Top Bar */
         }
 
         /* --- TYPOGRAFIE --- */
@@ -87,11 +163,10 @@
             padding: 25px 15px;
             border-radius: 20px;
             border: 1px solid var(--glass-border);
-            transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.3s;
+            transition: transform 0.2s, background 0.3s;
             cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        
         .glass-box:active { transform: scale(0.96); background: rgba(50,50,50,0.7); }
         .icon { font-size: 3rem; display: block; margin-bottom: 10px; }
         .glass-box h3 { font-size: 1.1rem; margin-bottom: 5px; color: #fff; }
@@ -153,6 +228,7 @@
         }
 
         .download-section { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; }
+        .download-label { font-size: 0.8rem; color: #aaa; margin-bottom: 10px; display: block; text-transform: uppercase; letter-spacing: 1px; }
         .dl-item {
             display: flex; align-items: center; justify-content: space-between;
             background: rgba(255,255,255,0.03); padding: 14px 20px;
@@ -161,105 +237,46 @@
         }
         .dl-item:hover { background: rgba(255,255,255,0.1); }
 
-        /* --- PLAYER BAR (MODERN) --- */
+        /* --- PLAYER BAR (ZENTRIERT) --- */
         .player-bar {
-            position: fixed;
-            bottom: 20px; 
-            left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 500px;
-            height: 70px;
-            background: rgba(18, 18, 18, 0.9);
-            backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 20px;
-            z-index: 5000;
-            display: grid;
-            grid-template-columns: 50px 1fr auto; 
-            align-items: center;
-            padding: 0 12px;
-            box-sizing: border-box;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 500px; height: 70px;
+            background: rgba(18, 18, 18, 0.9); backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; z-index: 5000;
+            display: grid; grid-template-columns: 50px 1fr auto; align-items: center;
+            padding: 0 12px; box-sizing: border-box;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         .player-bar:active { transform: translateX(-50%) scale(1.02); }
+        .player-bar.expanded-view { width: 96%; max-width: 600px; height: 80px; bottom: 30px; background: rgba(30, 30, 30, 0.95); border-color: rgba(255,255,255,0.3); }
 
-        .player-bar.expanded-view {
-            width: 96%; max-width: 600px;
-            height: 80px; bottom: 30px;
-            background: rgba(30, 30, 30, 0.95);
-            border-color: rgba(255,255,255,0.3);
-        }
-
-        .progress-bar-container {
-            position: absolute; top: 0; left: 15px; right: 15px; height: 3px;
-            background: rgba(255,255,255,0.1); cursor: pointer; border-radius: 10px; overflow: hidden;
-            top: -1px;
-        }
+        .progress-bar-container { position: absolute; top: -1px; left: 15px; right: 15px; height: 3px; background: rgba(255,255,255,0.1); cursor: pointer; border-radius: 10px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 10px; }
         .seek-slider { position: absolute; top: -10px; left: 0; width: 100%; height: 20px; opacity: 0; z-index: 10; cursor: pointer; }
 
         .player-left { position: relative; display: flex; align-items: center; }
-        .cover-img {
-            width: 44px; height: 44px; border-radius: 8px; object-fit: cover;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        
-        .player-center {
-            display: flex; flex-direction: column; justify-content: center;
-            padding-left: 12px; overflow: hidden;
-        }
-
-        .song-title {
-            font-size: 0.85rem; font-weight: 700; color: white;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            margin-bottom: 4px;
-        }
-
+        .cover-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .player-center { display: flex; flex-direction: column; justify-content: center; padding-left: 12px; overflow: hidden; }
+        .song-title { font-size: 0.85rem; font-weight: 700; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
         .main-controls { display: flex; align-items: center; gap: 15px; }
-
-        .ctrl-btn {
-            background: none; border: none; padding: 0; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0.7; transition: opacity 0.2s;
-        }
+        .ctrl-btn { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.7; transition: opacity 0.2s; }
         .ctrl-btn:hover { opacity: 1; }
         .ctrl-btn svg { width: 22px; height: 22px; fill: white; }
-
-        .play-btn {
-            width: 32px; height: 32px; background: white; border-radius: 50%;
-            opacity: 1; box-shadow: 0 2px 10px rgba(255,255,255,0.2);
-        }
+        .play-btn { width: 32px; height: 32px; background: white; border-radius: 50%; opacity: 1; box-shadow: 0 2px 10px rgba(255,255,255,0.2); }
         .play-btn svg { width: 14px; height: 14px; fill: black; margin-left: 1px; } 
         .play-btn.playing svg { margin-left: 0; fill: black; width: 12px; } 
-
         .player-right { display: flex; align-items: center; gap: 15px; padding-right: 5px; }
         .playlist-icon svg { width: 24px; height: 24px; }
 
         /* --- PLAYLIST POPUP --- */
-        .playlist-popup {
-            position: fixed; bottom: -120%; left: 2%; width: 96%;
-            max-height: 60vh; background: rgba(20, 20, 20, 0.98);
-            backdrop-filter: blur(30px);
-            padding: 20px 0; z-index: 4999; 
-            border-radius: 25px; border: 1px solid rgba(255,255,255,0.1);
-            transition: bottom 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            overflow-y: auto;
-        }
+        .playlist-popup { position: fixed; bottom: -120%; left: 2%; width: 96%; max-height: 60vh; background: rgba(20, 20, 20, 0.98); backdrop-filter: blur(30px); padding: 20px 0; z-index: 4999; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transition: bottom 0.5s cubic-bezier(0.19, 1, 0.22, 1); overflow-y: auto; }
         .playlist-popup.show { bottom: 100px; } 
-        .playlist-item {
-            padding: 12px 25px; border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: #ddd; font-size: 1rem; cursor: pointer; display: flex; align-items: center;
-        }
+        .playlist-item { padding: 12px 25px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ddd; font-size: 1rem; cursor: pointer; display: flex; align-items: center; }
         .playlist-item img { width: 40px; height: 40px; border-radius: 6px; margin-right: 15px; }
         .playlist-item.active { color: var(--primary); background: rgba(255,255,255,0.04); }
 
-        #celebration {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s;
-        }
+        #celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
         #celebration.active { opacity: 1; pointer-events: all; }
         .yeah-text { font-size: 18vw; font-weight: 900; color: #fff; transform: scale(0.5); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
         #celebration.active .yeah-text { transform: scale(1); }
@@ -269,6 +286,19 @@
 <body>
 
     <audio id="bgMusic"></audio>
+
+    <div class="top-nav">
+        <button class="nav-btn" onclick="sendGPS()">
+            <span class="nav-icon">📍</span> SOS
+        </button>
+        <button class="nav-btn" id="wodkaBtn" onclick="toggleWodkaMode()">
+            <span class="nav-icon">😵</span> Wodka
+        </button>
+        <button class="nav-btn" onclick="wenikSlap(this)">
+            <span class="nav-icon">🌿</span> Wenik
+            <span id="hitCounter" class="hit-badge">0</span>
+        </button>
+    </div>
 
     <div id="infoOverlay">
         <p id="infoText" style="font-weight: 600; font-size: 1.2rem;"></p>
@@ -285,38 +315,20 @@
             <div id="progressFill" class="progress-bar-fill"></div>
             <input type="range" id="seekSlider" class="seek-slider" value="0" min="0" max="100">
         </div>
-
         <div class="player-left">
             <img id="coverArt" class="cover-img" src="" alt="">
         </div>
-
         <div class="player-center">
-            <div class="song-info">
-                <span id="songTitle" class="song-title">Lade Musik...</span>
-            </div>
+            <div class="song-info"><span id="songTitle" class="song-title">Lade...</span></div>
             <div class="main-controls">
-                <button class="ctrl-btn" onclick="prevSong(); event.stopPropagation();">
-                    <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-                </button>
-                
-                <button class="ctrl-btn play-btn" id="playBtn" onclick="togglePlay(); event.stopPropagation();">
-                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </button>
-
-                <button class="ctrl-btn" onclick="nextSong(); event.stopPropagation();">
-                    <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-                </button>
+                <button class="ctrl-btn" onclick="prevSong(); event.stopPropagation();"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                <button class="ctrl-btn play-btn" id="playBtn" onclick="togglePlay(); event.stopPropagation();"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+                <button class="ctrl-btn" onclick="nextSong(); event.stopPropagation();"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
             </div>
         </div>
-
         <div class="player-right">
-            <button class="ctrl-btn" onclick="downloadCurrentSong(); event.stopPropagation();">
-                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            </button>
-            
-            <button class="ctrl-btn playlist-icon" onclick="togglePlaylist(); event.stopPropagation();">
-                <svg viewBox="0 0 24 24"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg>
-            </button>
+            <button class="ctrl-btn" onclick="downloadCurrentSong(); event.stopPropagation();"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button>
+            <button class="ctrl-btn playlist-icon" onclick="togglePlaylist(); event.stopPropagation();"><svg viewBox="0 0 24 24"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg></button>
         </div>
     </div>
 
@@ -325,9 +337,7 @@
     </div>
 
     <div class="video-section">
-        <video autoplay muted loop playsinline>
-            <source src="aufguss.mp4" type="video/mp4">
-        </video>
+        <video autoplay muted loop playsinline><source src="aufguss.mp4" type="video/mp4"></video>
         <div class="content-overlay">
             <h2>Happy Birthday, Alex!</h2>
             <h1>Endlich 40. Bro</h1> 
@@ -336,9 +346,7 @@
     </div>
 
     <div class="video-section">
-        <video autoplay muted loop playsinline>
-            <source src="programm.mp4" type="video/mp4">
-        </video>
+        <video autoplay muted loop playsinline><source src="programm.mp4" type="video/mp4"></video>
         <div class="content-overlay">
             <h2>Das Programm</h2>
             <div class="icon-grid">
@@ -362,9 +370,7 @@
     </div>
 
     <div class="video-section">
-        <video autoplay muted loop playsinline>
-            <source src="maenner.mp4" type="video/mp4">
-        </video>
+        <video autoplay muted loop playsinline><source src="maenner.mp4" type="video/mp4"></video>
         <div class="content-overlay">
             <div class="voucher-card">
                 <h2>Dein Geschenk</h2>
@@ -396,7 +402,57 @@
         const botToken = "8561313901:AAF_jIf9EkLFaI-mWIrgXb7iIt2cd1kqLFk"; 
         const chatId = "-1003505515564"; 
 
-        // --- PLAYLIST CONFIG ---
+        // --- 2. COOL FEATURES ---
+        
+        // A) GPS
+        function sendGPS() {
+            if (confirm("Standort an die Gruppe schicken?")) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(pos => {
+                        const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                        const msg = `🚨 SOS! Alex braucht Abholung: ${link}`;
+                        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
+                        alert("Standort gesendet! 🚓");
+                    }, () => alert("GPS Fehler."));
+                } else alert("Kein GPS.");
+            }
+        }
+
+        // B) Wodka Mode
+        function toggleWodkaMode() {
+            document.body.classList.toggle('drunk-mode');
+            document.getElementById('wodkaBtn').classList.toggle('wodka-active');
+        }
+
+        // C) Wenik Simulator (Mini Game)
+        let hitCount = 0;
+        function wenikSlap(btn) {
+            hitCount++;
+            document.getElementById('hitCounter').innerText = hitCount;
+            
+            // Animation: Shake Screen
+            document.body.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+            setTimeout(() => document.body.style.transform = 'none', 100);
+
+            // Leaf Particle (Fällt nach unten)
+            const leaf = document.createElement('div');
+            leaf.innerText = "🌿";
+            leaf.className = "leaf-particle";
+            // Zufällige Position um den Button
+            leaf.style.left = (Math.random() * 80 + 10) + "%"; 
+            leaf.style.top = "40px";
+            btn.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 1500);
+
+            // Special Milestones
+            if (hitCount === 50) {
+                const msg = "🔥 EILMELDUNG: Alex hat sich 50 Mal mit dem Wenik geschlagen! Maschine.";
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
+                alert("Level Up! Die Gruppe wurde informiert. 💪");
+            }
+        }
+
+        // --- PLAYLIST ---
         const playlist = [
             { 
                 title: "Banja Tag (Main Theme)", 
@@ -416,8 +472,7 @@
         ];
 
         let currentSongIndex = 0;
-        let wasPlayingBeforeHide = false; // Neu: Status merken
-
+        let wasPlayingBeforeHide = false;
         const audio = document.getElementById("bgMusic");
         const playBtn = document.getElementById("playBtn");
         const songTitle = document.getElementById("songTitle");
@@ -428,60 +483,40 @@
         const playlistContainer = document.getElementById("playlistContainer");
         const downloadList = document.getElementById("downloadList");
 
-        // --- INFO OVERLAY LOGIC ---
+        // --- INFO OVERLAY ---
         const descriptions = {
-            'aufguss': 'Hier schwitzt du Sünden aus, die du gar nicht begangen hast. 90 Grad? Das ist erst das Aufwärmen, Bruder. 🔥',
-            'wenik': 'Die einzige Schlägerei, für die man bezahlt. Wellness auf Russisch: Erst prügeln wir uns mit Birkenzweigen, dann fühlen wir uns wie neu geboren. 🌿',
-            'food': 'Flüssigkeitsausgleich ist wichtig (wir meinen Wodka). Dazu gibt\'s Essen, das Haare auf der Brust wachsen lässt. 🍻'
+            'aufguss': 'Hier schwitzt du Sünden aus. 90 Grad ist nur zum Aufwärmen. 🔥',
+            'wenik': 'Die einzige Schlägerei, für die man bezahlt. Wellness auf Russisch. 🌿',
+            'food': 'Wodka ist auch ein isotonisches Getränk. Dazu gibt\'s Männer-Essen. 🍻'
         };
 
         function showInfo(type, event) {
             event.stopPropagation();
-            const overlay = document.getElementById('infoOverlay');
-            const text = document.getElementById('infoText');
-            text.innerText = descriptions[type];
-            overlay.classList.add('active');
+            document.getElementById('infoText').innerText = descriptions[type];
+            document.getElementById('infoOverlay').classList.add('active');
         }
-
-        function hideInfo() {
-            document.getElementById('infoOverlay').classList.remove('active');
-        }
-
+        function hideInfo() { document.getElementById('infoOverlay').classList.remove('active'); }
         window.addEventListener('scroll', hideInfo);
         document.addEventListener('click', hideInfo);
 
-        // --- SCROLL & INTERACTION PLAYER ---
+        // --- PLAYER LOGIC ---
         window.addEventListener('scroll', () => {
-            const playerBar = document.querySelector('.player-bar');
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-                playerBar.classList.add('expanded-view');
-            } else {
-                playerBar.classList.remove('expanded-view');
-            }
+            const bar = document.querySelector('.player-bar');
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) bar.classList.add('expanded-view');
+            else bar.classList.remove('expanded-view');
         });
 
         function playerClickEffect() {
-            // CSS Effect via :active
+            // CSS Effect
         }
 
-        // --- RENDER FUNCTIONS ---
         function renderPlaylist() {
             playlistContainer.innerHTML = "";
             playlist.forEach((song, index) => {
                 const item = document.createElement("div");
                 item.className = `playlist-item ${index === currentSongIndex ? 'active' : ''}`;
-                item.innerHTML = `
-                    <div style="display:flex; align-items:center;">
-                        <img src="${song.cover}" alt="cover" onerror="this.src='https://via.placeholder.com/40'">
-                        <span>${song.title}</span>
-                    </div>
-                `;
-                item.onclick = () => {
-                    loadSong(index);
-                    audio.play();
-                    updatePlayIcon(true);
-                    togglePlaylist(); 
-                };
+                item.innerHTML = `<div style="display:flex;align-items:center;"><img src="${song.cover}" onerror="this.src='https://via.placeholder.com/40'"><span>${song.title}</span></div>`;
+                item.onclick = () => { loadSong(index); audio.play(); updatePlayIcon(true); togglePlaylist(); };
                 playlistContainer.appendChild(item);
             });
         }
@@ -490,157 +525,85 @@
             downloadList.innerHTML = "";
             playlist.forEach(song => {
                 const link = document.createElement("a");
-                link.href = song.src;
-                link.className = "dl-item";
-                link.setAttribute("download", ""); 
+                link.href = song.src; link.className = "dl-item"; link.setAttribute("download", "");
                 link.innerHTML = `<span>${song.title}</span> <span class="dl-icon">⬇️</span>`;
                 downloadList.appendChild(link);
             });
         }
 
-        // --- PLAYER FUNCTIONS ---
         function loadSong(index) {
             currentSongIndex = index;
             if (index < 0) currentSongIndex = playlist.length - 1;
             if (index >= playlist.length) currentSongIndex = 0;
-
             audio.src = playlist[currentSongIndex].src;
             songTitle.innerText = playlist[currentSongIndex].title;
             coverArt.src = playlist[currentSongIndex].cover;
-            
             coverArt.onerror = function() { this.src = 'https://via.placeholder.com/40/333/fff?text=MP3'; };
-
             renderPlaylist();
         }
 
         function downloadCurrentSong() {
-            const song = playlist[currentSongIndex];
             const link = document.createElement('a');
-            link.href = song.src;
-            link.download = song.title + ".mp3";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            link.href = playlist[currentSongIndex].src;
+            link.download = playlist[currentSongIndex].title + ".mp3";
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
         function updatePlayIcon(isPlaying) {
-            const btn = document.getElementById('playBtn');
             if(isPlaying) {
-                btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-                btn.classList.add('playing');
+                playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                playBtn.classList.add('playing');
             } else {
-                btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-                btn.classList.remove('playing');
+                playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                playBtn.classList.remove('playing');
             }
         }
 
-        function togglePlay() {
-            if (audio.paused) {
-                audio.play();
-                updatePlayIcon(true);
-            } else {
-                audio.pause();
-                updatePlayIcon(false);
-            }
-        }
+        function togglePlay() { if (audio.paused) { audio.play(); updatePlayIcon(true); } else { audio.pause(); updatePlayIcon(false); } }
+        function nextSong() { currentSongIndex++; loadSong(currentSongIndex); audio.play(); updatePlayIcon(true); }
+        function prevSong() { currentSongIndex--; loadSong(currentSongIndex); audio.play(); updatePlayIcon(true); }
+        function togglePlaylist() { playlistPopup.classList.toggle("show"); }
 
-        function nextSong() {
-            currentSongIndex++;
-            loadSong(currentSongIndex);
-            audio.play();
-            updatePlayIcon(true);
-        }
-
-        function prevSong() {
-            currentSongIndex--;
-            loadSong(currentSongIndex);
-            audio.play();
-            updatePlayIcon(true);
-        }
-        
-        function togglePlaylist() {
-            playlistPopup.classList.toggle("show");
-        }
-
-        // --- UPDATE PROGRESS BAR ---
         audio.addEventListener('timeupdate', () => {
             if(audio.duration) {
-                const progressPercent = (audio.currentTime / audio.duration) * 100;
-                seekSlider.value = progressPercent;
-                progressFill.style.width = progressPercent + "%";
+                const pct = (audio.currentTime / audio.duration) * 100;
+                seekSlider.value = pct; progressFill.style.width = pct + "%";
             }
         });
-
-        seekSlider.addEventListener('input', () => {
-            const seekTime = (seekSlider.value * audio.duration) / 100;
-            audio.currentTime = seekTime;
-            progressFill.style.width = seekSlider.value + "%";
-        });
-
+        seekSlider.addEventListener('input', () => { audio.currentTime = (seekSlider.value * audio.duration) / 100; progressFill.style.width = seekSlider.value + "%"; });
         audio.addEventListener('ended', nextSong);
 
-        // --- PAUSE ON LEAVE & RESUME ON RETURN (NEU) ---
+        // Resume Logic
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
-                // User geht weg: Prüfen ob Musik läuft
-                if (!audio.paused) {
-                    wasPlayingBeforeHide = true;
-                    audio.pause();
-                    updatePlayIcon(false);
-                } else {
-                    wasPlayingBeforeHide = false;
-                }
+                if (!audio.paused) { wasPlayingBeforeHide = true; audio.pause(); updatePlayIcon(false); }
+                else { wasPlayingBeforeHide = false; }
             } else {
-                // User kommt zurück: Wenn Musik lief, wieder starten
-                if (wasPlayingBeforeHide) {
-                    audio.play().then(() => {
-                        updatePlayIcon(true);
-                    }).catch(e => {
-                        console.log("Resume blocked by browser policy");
-                        updatePlayIcon(false); 
-                    });
-                }
+                if (wasPlayingBeforeHide) { audio.play().catch(()=>{}); updatePlayIcon(true); }
             }
         });
 
-        // --- TELEGRAM ---
+        // --- COMMON ---
         function sendTelegram() {
-            const input = document.getElementById('chatMsg');
-            const status = document.getElementById('chatStatus');
-            const message = input.value;
-            if (message.trim() === "") { status.innerText = "Bitte Nachricht eingeben."; return; }
-            status.innerText = "Sende..."; status.style.color = "#aaa";
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("Nachricht von Banya-Seite: " + message)}`;
-            fetch(url).then(r=>r.json()).then(d=>{
-                if(d.ok){ status.innerText="Gesendet! ✅"; status.style.color="#4caf50"; input.value=""; }
-                else { status.innerText="Fehler. ❌"; }
-            }).catch(e=>status.innerText="Fehler. ❌");
+            const inp = document.getElementById('chatMsg');
+            if (inp.value.trim() === "") return;
+            document.getElementById('chatStatus').innerText = "Sende...";
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("Nachricht: " + inp.value)}`)
+                .then(()=>{ document.getElementById('chatStatus').innerText="Gesendet!"; inp.value=""; });
         }
 
-        // --- INIT ---
         function triggerYeah() {
-            const overlay = document.getElementById('celebration');
-            overlay.classList.add('active');
-            setTimeout(() => { overlay.classList.remove('active'); }, 3000);
-            const message = "Alex hat das Geschenk angenommen! 🎉";
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-            fetch(url).catch(e => {});
+            document.getElementById('celebration').classList.add('active');
+            setTimeout(() => document.getElementById('celebration').classList.remove('active'), 3000);
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("Alex hat das Geschenk angenommen! 🎉")}`).catch(()=>{});
         }
 
         window.addEventListener('load', function() {
-            renderPlaylist();
-            renderDownloadList();
-            loadSong(0);
-
+            renderPlaylist(); renderDownloadList(); loadSong(0);
             var startAudio = function() {
-                audio.play().then(() => {
-                    updatePlayIcon(true);
-                    document.removeEventListener('click', startAudio);
-                    document.removeEventListener('touchstart', startAudio);
-                }).catch(e => console.log("Autoplay waiting for interaction"));
+                audio.play().then(() => { updatePlayIcon(true); document.removeEventListener('click', startAudio); document.removeEventListener('touchstart', startAudio); }).catch(()=>{});
             };
-            document.addEventListener('click', startAudio);
-            document.addEventListener('touchstart', startAudio);
+            document.addEventListener('click', startAudio); document.addEventListener('touchstart', startAudio);
         });
     </script>
 </body>
