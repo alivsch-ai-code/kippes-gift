@@ -8,6 +8,7 @@
         /* --- 1. MODERN GRUNDLAGEN --- */
         :root {
             --primary: #2AABEE;
+            --danger: #ff4757;
             --glass-bg: rgba(20, 20, 20, 0.65);
             --glass-border: rgba(255, 255, 255, 0.12);
         }
@@ -37,67 +38,103 @@
             100% { transform: rotate(0deg) translate(0,0); }
         }
 
-        /* --- NEU: TOP NAV BAR (MENÜ OBEN) --- */
+        /* --- TOP NAV BAR (SCHLANK & MODERN) --- */
         .top-nav {
             position: fixed;
-            top: 0; left: 0; width: 100%;
-            height: auto;
-            min-height: 60px;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            z-index: 7000; /* Höher als alles andere */
+            top: 10px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 450px;
+            height: 50px; /* Schön schlank */
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 25px; /* Pill Shape */
+            z-index: 7000;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
-            padding: 10px 5px;
-            padding-top: max(10px, env(safe-area-inset-top)); /* Rücksicht auf iPhone Notch */
-            box-sizing: border-box;
+            padding: 0 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .nav-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: transparent;
+            border: none;
             color: white;
-            padding: 8px 12px;
+            padding: 0 15px;
+            height: 100%;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            display: flex; align-items: center; gap: 6px;
             transition: all 0.2s;
-            min-width: 70px;
-            position: relative;
+            opacity: 0.8;
         }
+        .nav-btn:hover { opacity: 1; background: rgba(255,255,255,0.05); }
+        .nav-btn:active { transform: scale(0.95); }
+        .nav-icon { font-size: 1.1rem; }
         
-        .nav-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.25); }
-        
-        .nav-icon { font-size: 1.2rem; display: block; }
-        
-        .wodka-active { background: #ff4757 !important; border-color: #ff4757 !important; box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
+        .wodka-active { color: #ff6b81 !important; text-shadow: 0 0 10px rgba(255, 71, 87, 0.6); opacity: 1; }
 
-        /* Wenik Animation (angepasst: fällt jetzt nach UNTEN) */
+        /* --- OVERLAYS & ANIMATIONEN --- */
+        
+        /* SOS Overlay */
+        #sosOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(200, 0, 0, 0.2) 0%, rgba(0,0,0,0.95) 100%);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s;
+            backdrop-filter: blur(5px);
+        }
+        #sosOverlay.active { opacity: 1; pointer-events: all; }
+        
+        .sos-pulse {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: var(--danger);
+            box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+            animation: pulse-red 1.5s infinite;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 3rem; margin-bottom: 20px;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 50px rgba(255, 71, 87, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+
+        /* Toast Notification (für Wodka & Infos) */
+        #toast {
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
+            background: rgba(30,30,30,0.95); border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 25px; border-radius: 30px;
+            color: white; font-weight: 600; font-size: 0.9rem;
+            z-index: 8000; opacity: 0; pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; align-items: center; gap: 10px;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Wenik Particle (Fliegt wild) */
         .leaf-particle {
-            position: absolute;
-            font-size: 1.5rem;
+            position: fixed;
+            font-size: 2rem;
             pointer-events: none;
-            z-index: 8000;
-            animation: floatDown 1.5s ease-out forwards;
+            z-index: 8500;
+            top: 100%; /* Start unten */
+            animation: flyAround 2s linear forwards;
         }
-        @keyframes floatDown {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(150px) rotate(180deg); opacity: 0; }
+        @keyframes flyAround {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--tx), -120vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Hit Badge im Button */
         .hit-badge {
-            position: absolute; top: -5px; right: -5px;
             background: #2AABEE; color: white;
-            font-size: 0.65rem; padding: 2px 6px; border-radius: 10px;
-            font-weight: bold; border: 1px solid #000;
+            font-size: 0.6rem; padding: 1px 6px; border-radius: 8px;
+            margin-left: 5px;
         }
-
 
         /* --- VIDEO CONTAINER --- */
         .video-section {
@@ -121,7 +158,7 @@
         .content-overlay {
             position: relative; z-index: 2; padding: 25px;
             width: 100%; max-width: 1000px; box-sizing: border-box;
-            padding-top: 80px; /* Platz für Top Bar */
+            padding-top: 80px;
         }
 
         /* --- TYPOGRAFIE --- */
@@ -237,7 +274,7 @@
         }
         .dl-item:hover { background: rgba(255,255,255,0.1); }
 
-        /* --- PLAYER BAR (ZENTRIERT) --- */
+        /* --- PLAYER BAR --- */
         .player-bar {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 92%; max-width: 500px; height: 70px;
@@ -299,6 +336,14 @@
             <span id="hitCounter" class="hit-badge">0</span>
         </button>
     </div>
+
+    <div id="sosOverlay">
+        <div class="sos-pulse">🚨</div>
+        <h2 style="margin: 0;">ALARM GESENDET</h2>
+        <p style="margin-top: 10px;">Jungs werden informiert...</p>
+    </div>
+
+    <div id="toast">✅ Info</div>
 
     <div id="infoOverlay">
         <p id="infoText" style="font-weight: 600; font-size: 1.2rem;"></p>
@@ -402,73 +447,88 @@
         const botToken = "8561313901:AAF_jIf9EkLFaI-mWIrgXb7iIt2cd1kqLFk"; 
         const chatId = "-1003505515564"; 
 
-        // --- 2. COOL FEATURES ---
+        // --- 2. LOGIC FOR TOP BAR ---
         
-        // A) GPS
+        function showToast(msg, icon) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<span style="font-size:1.2rem">${icon}</span> ${msg}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // A) SOS Animation & Send
         function sendGPS() {
             if (confirm("Standort an die Gruppe schicken?")) {
+                // Animation starten
+                const overlay = document.getElementById('sosOverlay');
+                overlay.classList.add('active');
+                
+                // Nach 3 Sek ausblenden
+                setTimeout(() => overlay.classList.remove('active'), 3000);
+
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(pos => {
                         const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                         const msg = `🚨 SOS! Alex braucht Abholung: ${link}`;
                         fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
-                        alert("Standort gesendet! 🚓");
-                    }, () => alert("GPS Fehler."));
-                } else alert("Kein GPS.");
+                    }, () => showToast("GPS Fehler", "❌"));
+                } else showToast("Kein GPS", "❌");
             }
         }
 
-        // B) Wodka Mode
+        // B) Wodka Mode + Toast
         function toggleWodkaMode() {
             document.body.classList.toggle('drunk-mode');
-            document.getElementById('wodkaBtn').classList.toggle('wodka-active');
+            const isActive = document.body.classList.contains('drunk-mode');
+            const btn = document.getElementById('wodkaBtn');
+            
+            if(isActive) {
+                btn.classList.add('wodka-active');
+                showToast("Wodka Modus: AKTIV", "😵");
+            } else {
+                btn.classList.remove('wodka-active');
+                showToast("Wodka Modus: AUS", "😌");
+            }
         }
 
-        // C) Wenik Simulator (Mini Game)
+        // C) Wenik Simulator (Multi-Particle)
         let hitCount = 0;
         function wenikSlap(btn) {
             hitCount++;
             document.getElementById('hitCounter').innerText = hitCount;
             
-            // Animation: Shake Screen
+            // Screen Shake
             document.body.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
             setTimeout(() => document.body.style.transform = 'none', 100);
 
-            // Leaf Particle (Fällt nach unten)
-            const leaf = document.createElement('div');
-            leaf.innerText = "🌿";
-            leaf.className = "leaf-particle";
-            // Zufällige Position um den Button
-            leaf.style.left = (Math.random() * 80 + 10) + "%"; 
-            leaf.style.top = "40px";
-            btn.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 1500);
+            // Spawn multiple leaves
+            for(let i=0; i<8; i++) {
+                createLeaf();
+            }
 
-            // Special Milestones
             if (hitCount === 50) {
                 const msg = "🔥 EILMELDUNG: Alex hat sich 50 Mal mit dem Wenik geschlagen! Maschine.";
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
-                alert("Level Up! Die Gruppe wurde informiert. 💪");
+                showToast("Level Up! Gruppe informiert.", "💪");
             }
         }
 
-        // --- PLAYLIST ---
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.innerText = "🌿";
+            leaf.className = "leaf-particle";
+            // Random Start Pos (Unten, aber über die Breite verteilt)
+            leaf.style.left = (Math.random() * 100) + "%"; 
+            leaf.style.setProperty('--tx', (Math.random() * 200 - 100) + "px"); // Random X movement
+            document.body.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 2000);
+        }
+
+        // --- PLAYLIST CONFIG ---
         const playlist = [
-            { 
-                title: "Banja Tag (Main Theme)", 
-                src: "babo.mp3", 
-                cover: "cover_banya_tag.png" 
-            },
-            { 
-                title: "Wenik Slap Beat", 
-                src: "song2.mp3", 
-                cover: "cover_banya_tag.png" 
-            }, 
-            { 
-                title: "Wodka Melodie", 
-                src: "song3.mp3", 
-                cover: "cover_banya_tag.png" 
-            } 
+            { title: "Banja Tag (Main Theme)", src: "babo.mp3", cover: "cover_banya_tag.png" },
+            { title: "Wenik Slap Beat", src: "song2.mp3", cover: "cover_banya_tag.png" }, 
+            { title: "Wodka Melodie", src: "song3.mp3", cover: "cover_banya_tag.png" } 
         ];
 
         let currentSongIndex = 0;
@@ -506,9 +566,7 @@
             else bar.classList.remove('expanded-view');
         });
 
-        function playerClickEffect() {
-            // CSS Effect
-        }
+        function playerClickEffect() { /* CSS Active */ }
 
         function renderPlaylist() {
             playlistContainer.innerHTML = "";
