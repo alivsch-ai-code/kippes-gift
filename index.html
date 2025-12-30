@@ -22,60 +22,67 @@
             -webkit-tap-highlight-color: transparent;
             padding-bottom: 120px; 
             scroll-behavior: smooth;
-            transition: filter 2s ease;
         }
 
-        /* --- WODKA MODUS --- */
-        body.drunk-mode {
-            filter: blur(1.5px) contrast(1.2);
+        /* --- WODKA MODUS (FIX) --- */
+        /* Wichtig: Wir wenden das Wackeln NUR auf den Inhalt an, nicht auf das Menü! */
+        body.drunk-mode .video-section {
+            filter: blur(2px) contrast(1.2);
             animation: drunkWobble 5s infinite ease-in-out;
         }
+
         @keyframes drunkWobble {
-            0% { transform: rotate(0deg) translate(0,0); }
-            25% { transform: rotate(1deg) translate(2px, 2px); }
-            50% { transform: rotate(-1deg) translate(-2px, 1px); }
-            75% { transform: rotate(0.5deg) translate(1px, -2px); }
-            100% { transform: rotate(0deg) translate(0,0); }
+            0% { transform: rotate(0deg) translate(0,0) scale(1); }
+            25% { transform: rotate(1deg) translate(5px, 5px) scale(1.01); }
+            50% { transform: rotate(-1deg) translate(-5px, 2px) scale(1); }
+            75% { transform: rotate(0.5deg) translate(2px, -5px) scale(1.01); }
+            100% { transform: rotate(0deg) translate(0,0) scale(1); }
         }
 
-        /* --- TOP NAV BAR (SCHLANK & MODERN) --- */
+        /* --- TOP NAV BAR --- */
         .top-nav {
             position: fixed;
-            top: 10px; left: 50%; transform: translateX(-50%);
-            width: 95%; max-width: 450px;
-            height: 50px; /* Schön schlank */
-            background: rgba(20, 20, 20, 0.85);
+            top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 420px;
+            height: 55px;
+            background: rgba(15, 15, 15, 0.9); /* Etwas dunkler für besseren Kontrast */
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 25px; /* Pill Shape */
-            z-index: 7000;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            z-index: 9000; /* Sehr hoch, damit es immer oben bleibt */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 0 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            transition: all 0.3s;
         }
 
         .nav-btn {
             background: transparent;
             border: none;
-            color: white;
-            padding: 0 15px;
+            color: rgba(255,255,255,0.9);
+            padding: 0 12px;
             height: 100%;
             border-radius: 20px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: flex; align-items: center; gap: 6px;
             transition: all 0.2s;
-            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .nav-btn:hover { opacity: 1; background: rgba(255,255,255,0.05); }
-        .nav-btn:active { transform: scale(0.95); }
-        .nav-icon { font-size: 1.1rem; }
+        .nav-btn:active { transform: scale(0.92); opacity: 0.8; }
+        .nav-icon { font-size: 1.2rem; }
         
-        .wodka-active { color: #ff6b81 !important; text-shadow: 0 0 10px rgba(255, 71, 87, 0.6); opacity: 1; }
+        /* Aktiver Wodka Button leuchtet */
+        .wodka-active { 
+            color: #ff4757 !important; 
+            text-shadow: 0 0 15px rgba(255, 71, 87, 0.8);
+            background: rgba(255, 71, 87, 0.1) !important;
+        }
 
         /* --- OVERLAYS & ANIMATIONEN --- */
         
@@ -103,9 +110,9 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
         }
 
-        /* Toast Notification (für Wodka & Infos) */
+        /* Toast Notification */
         #toast {
-            position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
+            position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px);
             background: rgba(30,30,30,0.95); border: 1px solid rgba(255,255,255,0.2);
             padding: 12px 25px; border-radius: 30px;
             color: white; font-weight: 600; font-size: 0.9rem;
@@ -116,13 +123,13 @@
         }
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* Wenik Particle (Fliegt wild) */
+        /* Wenik Particle */
         .leaf-particle {
             position: fixed;
             font-size: 2rem;
             pointer-events: none;
             z-index: 8500;
-            top: 100%; /* Start unten */
+            top: 100%; 
             animation: flyAround 2s linear forwards;
         }
         @keyframes flyAround {
@@ -132,8 +139,8 @@
 
         .hit-badge {
             background: #2AABEE; color: white;
-            font-size: 0.6rem; padding: 1px 6px; border-radius: 8px;
-            margin-left: 5px;
+            font-size: 0.65rem; padding: 2px 7px; border-radius: 10px;
+            margin-left: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         /* --- VIDEO CONTAINER --- */
@@ -339,11 +346,11 @@
 
     <div id="sosOverlay">
         <div class="sos-pulse">🚨</div>
-        <h2 style="margin: 0;">ALARM GESENDET</h2>
-        <p style="margin-top: 10px;">Jungs werden informiert...</p>
+        <h2 style="margin: 0; font-weight:800;">ALARM GESENDET</h2>
+        <p style="margin-top: 10px; color:#ccc;">Jungs werden informiert...</p>
     </div>
 
-    <div id="toast">✅ Info</div>
+    <div id="toast"></div>
 
     <div id="infoOverlay">
         <p id="infoText" style="font-weight: 600; font-size: 1.2rem;"></p>
@@ -498,8 +505,11 @@
             document.getElementById('hitCounter').innerText = hitCount;
             
             // Screen Shake
-            document.body.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
-            setTimeout(() => document.body.style.transform = 'none', 100);
+            const videoSec = document.querySelector('.video-section');
+            if(videoSec) {
+                videoSec.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+                setTimeout(() => videoSec.style.transform = 'none', 100);
+            }
 
             // Spawn multiple leaves
             for(let i=0; i<8; i++) {
