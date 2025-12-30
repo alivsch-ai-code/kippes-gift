@@ -99,12 +99,52 @@
             padding: 30px 20px;
             border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease, background 0.2s;
+            cursor: pointer; /* Zeigt an, dass es klickbar ist */
+        }
+        
+        .glass-box:active {
+            transform: scale(0.95);
+            background: rgba(40, 40, 40, 0.8);
         }
 
         .icon { font-size: 3.5rem; display: block; margin-bottom: 15px; }
         .glass-box h3 { font-size: 1.3rem; margin-bottom: 8px; color: #fff; }
-        .glass-box p { font-size: 0.95rem; color: #ccc; }
+        .glass-box p { font-size: 0.95rem; color: #ccc; pointer-events: none; }
+
+        /* --- INFO OVERLAY (NEU) --- */
+        #infoOverlay {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 85%;
+            max-width: 400px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 6000; /* Über allem */
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        #infoOverlay.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #infoText {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: white;
+            margin: 0;
+        }
 
         /* --- GUTSCHEIN & CHAT KARTE --- */
         .voucher-card {
@@ -314,6 +354,11 @@
 
     <div class="sound-hint">Tippe irgendwo für Sound 🎵</div>
 
+    <div id="infoOverlay">
+        <p id="infoText"></p>
+        <p style="font-size: 0.8rem; color: #888; margin-top: 15px;">(Tippe irgendwo, um zu schließen)</p>
+    </div>
+
     <div id="playlistPopup" class="playlist-popup">
         <div class="playlist-header">Wähle einen Song</div>
         <div id="playlistContainer"></div>
@@ -365,18 +410,19 @@
         </video>
         <div class="content-overlay">
             <h2>Das Programm</h2>
+            
             <div class="icon-grid">
-                <div class="glass-box">
+                <div class="glass-box" onclick="showInfo('aufguss', event)">
                     <span class="icon">🔥</span>
                     <h3>Aufguss</h3>
                     <p>Echte russische Hitze.</p>
                 </div>
-                <div class="glass-box">
+                <div class="glass-box" onclick="showInfo('wenik', event)">
                     <span class="icon">🌿</span>
                     <h3>Wenik</h3>
                     <p>Schlagen mit Birkenzweigen.</p>
                 </div>
-                <div class="glass-box">
+                <div class="glass-box" onclick="showInfo('food', event)">
                     <span class="icon">🍻</span>
                     <h3>Essen & Trinken</h3>
                     <p>Das volle Programm.</p>
@@ -428,12 +474,12 @@
                 cover: "cover_banya_tag.png" 
             },
             { 
-                title: "Banja Tag", 
+                title: "Song 2", 
                 src: "babo.mp3", 
                 cover: "cover_banya_tag.png" 
             }, 
             { 
-                title: "Banja Tag", 
+                title: "Song 3", 
                 src: "babo.mp3", 
                 cover: "cover_banya_tag.png" 
             } 
@@ -449,6 +495,34 @@
         const playlistPopup = document.getElementById("playlistPopup");
         const playlistContainer = document.getElementById("playlistContainer");
         const downloadList = document.getElementById("downloadList");
+
+        // --- INFO OVERLAY LOGIC ---
+        const descriptions = {
+            'aufguss': 'Hier schwitzt du Sünden aus, die du gar nicht begangen hast. 90 Grad? Das ist erst das Aufwärmen, Bruder. 🔥',
+            'wenik': 'Die einzige Schlägerei, für die man bezahlt. Wellness auf Russisch: Erst prügeln wir uns mit Birkenzweigen, dann fühlen wir uns wie neu geboren. 🌿',
+            'food': 'Flüssigkeitsausgleich ist wichtig (wir meinen Wodka). Dazu gibt\'s Essen, das Haare auf der Brust wachsen lässt. 🍻'
+        };
+
+        function showInfo(type, event) {
+            // Verhindert, dass der Klick direkt das Schließen auslöst
+            event.stopPropagation();
+            
+            const overlay = document.getElementById('infoOverlay');
+            const text = document.getElementById('infoText');
+            
+            text.innerText = descriptions[type];
+            overlay.classList.add('active');
+        }
+
+        function hideInfo() {
+            const overlay = document.getElementById('infoOverlay');
+            overlay.classList.remove('active');
+        }
+
+        // Listener zum Schließen
+        window.addEventListener('scroll', hideInfo);
+        document.addEventListener('click', hideInfo);
+
 
         // --- RENDER FUNCTIONS ---
         function renderPlaylist() {
