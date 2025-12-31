@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-    <title>Banya Ausflug</title>
+    <title>Banya Ausflug - Alex 40</title>
     <style>
         /* --- 1. MODERN GRUNDLAGEN --- */
         :root {
@@ -26,6 +26,7 @@
         }
 
         /* --- WODKA MODUS --- */
+        /* Wir wackeln nur den Content, damit Menüs bedienbar bleiben */
         body.drunk-mode .video-section {
             filter: blur(2px) contrast(1.2);
             animation: drunkWobble 5s infinite ease-in-out;
@@ -95,7 +96,7 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
         }
 
-        /* Toast & Hints */
+        /* Toast Notification */
         #toast {
             position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px);
             background: rgba(30,30,30,0.95); border: 1px solid rgba(255,255,255,0.2);
@@ -121,26 +122,20 @@
         }
         #fullCoverOverlay.active #fullCoverImg { transform: scale(1); }
 
-        /* Always On Hint Bubble */
+        /* Always On Hint */
         .always-on-hint {
-            position: absolute;
-            bottom: 75px; right: 60px; /* Position über dem Button */
-            background: #2AABEE; color: black;
-            padding: 8px 12px; border-radius: 12px;
-            font-size: 0.75rem; font-weight: 700;
-            pointer-events: none; opacity: 0;
-            transition: opacity 0.5s, transform 0.5s;
-            transform: translateY(10px);
-            white-space: nowrap;
-            box-shadow: 0 5px 15px rgba(42, 171, 238, 0.4);
+            position: absolute; bottom: 75px; right: 60px; background: #2AABEE; color: black;
+            padding: 8px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;
+            pointer-events: none; opacity: 0; transition: opacity 0.5s, transform 0.5s;
+            transform: translateY(10px); white-space: nowrap; box-shadow: 0 5px 15px rgba(42, 171, 238, 0.4);
         }
         .always-on-hint.visible { opacity: 1; transform: translateY(0); }
-        /* Pfeil unten an der Bubble */
         .always-on-hint::after {
-            content: ''; position: absolute; bottom: -5px; right: 20px;
-            width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #2AABEE;
+            content: ''; position: absolute; bottom: -5px; right: 20px; width: 0; height: 0;
+            border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #2AABEE;
         }
 
+        /* Wenik Particle */
         .leaf-particle {
             position: fixed; font-size: 2rem; pointer-events: none; z-index: 8500; top: 100%; 
             animation: flyAround 2s linear forwards;
@@ -151,8 +146,7 @@
         }
 
         .hit-badge {
-            background: #2AABEE; color: white;
-            font-size: 0.65rem; padding: 2px 7px; border-radius: 10px;
+            background: #2AABEE; color: white; font-size: 0.65rem; padding: 2px 7px; border-radius: 10px;
             margin-left: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
@@ -170,6 +164,7 @@
             position: relative; z-index: 2; padding: 25px; width: 100%; max-width: 1000px; box-sizing: border-box; padding-top: 80px;
         }
 
+        /* --- TYPOGRAFIE --- */
         h1 {
             font-size: clamp(2.5rem, 8vw, 5.5rem); line-height: 1.05; margin-bottom: 25px; text-transform: uppercase; font-weight: 800; letter-spacing: -2px;
             background: linear-gradient(to bottom, #fff, #bbb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 40px rgba(0,0,0,0.5);
@@ -266,7 +261,6 @@
         .player-right { display: flex; align-items: center; gap: 10px; padding-right: 2px; }
         .playlist-icon svg { width: 24px; height: 24px; }
 
-        /* Style für Always On Button Aktiv */
         .always-on-active svg { fill: #2AABEE !important; filter: drop-shadow(0 0 5px rgba(42, 171, 238, 0.5)); }
 
         .playlist-popup { position: fixed; bottom: -120%; left: 2%; width: 96%; max-height: 60vh; background: rgba(20, 20, 20, 0.98); backdrop-filter: blur(30px); padding: 20px 0; z-index: 4999; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transition: bottom 0.5s cubic-bezier(0.19, 1, 0.22, 1); overflow-y: auto; }
@@ -289,7 +283,7 @@
     <div id="alwaysOnHint" class="always-on-hint">Musik läuft im Hintergrund weiter</div>
 
     <div id="fullCoverOverlay" onclick="closeFullCover()">
-        <img id="fullCoverImg" src="" alt="Album Cover Groß">
+        <img id="fullCoverImg" src="" alt="Cover Groß">
     </div>
 
     <div class="top-nav">
@@ -328,11 +322,9 @@
             <div id="progressFill" class="progress-bar-fill"></div>
             <input type="range" id="seekSlider" class="seek-slider" value="0" min="0" max="100">
         </div>
-        
         <div class="player-left">
             <img id="coverArt" class="cover-img" src="" alt="" onclick="expandCover(event)">
         </div>
-        
         <div class="player-center">
             <div class="song-info"><span id="songTitle" class="song-title">Lade...</span></div>
             <div class="main-controls">
@@ -359,7 +351,7 @@
         <div class="content-overlay">
             <h2>Happy Birthday, Alex!</h2>
             <h1>Endlich 40. Bro</h1> 
-            <p>Der Porsche auf dem Holzbrett war erst der Anfang. Wir haben uns noch einiges mehr einfallen lassen und schenken dir einen Ausflug in die Hitze. Was dich erwartet ? Scroll weiter ;)</p>
+            <p>Der Audi auf dem Holzbrett war erst der Anfang. Wir haben uns noch einiges mehr einfallen lassen und schenken dir einen Ausflug in die Hitze.</p>
         </div>
     </div>
 
@@ -426,6 +418,10 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        function sendTelegramChat(text) {
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`).catch(e=>console.log(e));
+        }
+
         function sendGPS() {
             if (confirm("Standort an die Gruppe schicken?")) {
                 const overlay = document.getElementById('sosOverlay');
@@ -436,7 +432,8 @@
                     navigator.geolocation.getCurrentPosition(pos => {
                         const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                         const msg = `🚨 SOS! Alex braucht Abholung: ${link}`;
-                        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
+                        sendTelegramChat(msg);
+                        showToast("Standort gesendet!", "✅");
                     }, () => showToast("GPS Fehler", "❌"));
                 } else showToast("Kein GPS", "❌");
             }
@@ -446,7 +443,6 @@
             document.body.classList.toggle('drunk-mode');
             const isActive = document.body.classList.contains('drunk-mode');
             const btn = document.getElementById('wodkaBtn');
-            
             if(isActive) {
                 btn.classList.add('wodka-active');
                 showToast("Wodka Modus: AKTIV", "😵");
@@ -467,8 +463,7 @@
             }
             for(let i=0; i<8; i++) { createLeaf(); }
             if (hitCount === 50) {
-                const msg = "🔥 EILMELDUNG: Alex hat sich 50 Mal mit dem Wenik geschlagen! Maschine.";
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
+                sendTelegramChat("🔥 EILMELDUNG: Alex hat sich 50 Mal mit dem Wenik geschlagen! Maschine.");
                 showToast("Level Up! Gruppe informiert.", "💪");
             }
         }
@@ -514,12 +509,93 @@
         const playlistContainer = document.getElementById("playlistContainer");
         const downloadList = document.getElementById("downloadList");
 
+        // --- MEDIA SESSION ---
+        function updateMediaSession() {
+            if ('mediaSession' in navigator) {
+                const song = playlist[currentSongIndex];
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: song.title, artist: 'Banya Boys', album: 'Alex Birthday',
+                    artwork: [{ src: song.cover, sizes: '512x512', type: 'image/jpeg' }]
+                });
+                navigator.mediaSession.setActionHandler('play', togglePlay);
+                navigator.mediaSession.setActionHandler('pause', togglePlay);
+                navigator.mediaSession.setActionHandler('previoustrack', prevSong);
+                navigator.mediaSession.setActionHandler('nexttrack', nextSong);
+            }
+        }
+
+        function loadSong(index) {
+            currentSongIndex = index;
+            if (index < 0) currentSongIndex = playlist.length - 1;
+            if (index >= playlist.length) currentSongIndex = 0;
+            audio.src = playlist[currentSongIndex].src;
+            songTitle.innerText = playlist[currentSongIndex].title;
+            coverArt.src = playlist[currentSongIndex].cover;
+            coverArt.onerror = function() { this.src = 'https://via.placeholder.com/40/333/fff?text=MP3'; };
+            renderPlaylist();
+            updateMediaSession();
+        }
+
+        function togglePlay() { 
+            if (audio.paused) { audio.play(); updatePlayIcon(true); } 
+            else { audio.pause(); updatePlayIcon(false); }
+            updateMediaSession();
+        }
+
+        function nextSong() { currentSongIndex++; loadSong(currentSongIndex); audio.play(); updatePlayIcon(true); }
+        function prevSong() { currentSongIndex--; loadSong(currentSongIndex); audio.play(); updatePlayIcon(true); }
+
+        function updatePlayIcon(isPlaying) {
+            if(isPlaying) {
+                playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                playBtn.classList.add('playing');
+            } else {
+                playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                playBtn.classList.remove('playing');
+            }
+        }
+
+        function toggleAlwaysOn() {
+            isAlwaysOn = !isAlwaysOn;
+            const btn = document.getElementById('alwaysOnBtn');
+            if(isAlwaysOn) {
+                btn.classList.add('always-on-active');
+                showToast("Always On: AKTIV ♾️", "🎵");
+            } else {
+                btn.classList.remove('always-on-active');
+                showToast("Always On: AUS", "⏸");
+            }
+        }
+
+        // Expand Cover Logic
+        function expandCover(event) {
+            event.stopPropagation();
+            const overlay = document.getElementById('fullCoverOverlay');
+            const img = document.getElementById('fullCoverImg');
+            img.src = playlist[currentSongIndex].cover;
+            overlay.classList.add('active');
+        }
+        function closeFullCover() { document.getElementById('fullCoverOverlay').classList.remove('active'); }
+        document.getElementById('fullCoverOverlay').addEventListener('touchmove', closeFullCover);
+
+        // Resume Logic
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (!isAlwaysOn) {
+                    if (!audio.paused) { wasPlayingBeforeHide = true; audio.pause(); updatePlayIcon(false); }
+                    else { wasPlayingBeforeHide = false; }
+                }
+            } else {
+                if (wasPlayingBeforeHide && !isAlwaysOn) { audio.play().catch(()=>{}); updatePlayIcon(true); }
+            }
+        });
+
+        // Other UI
         const descriptions = {
             'aufguss': 'Hier schwitzt du Sünden aus. 90 Grad ist nur zum Aufwärmen. 🔥',
             'wenik': 'Die einzige Schlägerei, für die man bezahlt. Wellness auf Russisch. 🌿',
             'food': 'Wodka ist auch ein isotonisches Getränk. Dazu gibt\'s Männer-Essen. 🍻'
         };
-
         function showInfo(type, event) {
             event.stopPropagation();
             document.getElementById('infoText').innerText = descriptions[type];
@@ -536,26 +612,7 @@
         });
 
         function playerClickEffect() { /* CSS Active */ }
-
-        // --- COVER EXPAND LOGIC ---
-        function expandCover(event) {
-            event.stopPropagation(); // Nicht den Player-Klick triggern
-            const overlay = document.getElementById('fullCoverOverlay');
-            const img = document.getElementById('fullCoverImg');
-            
-            // Setze aktuelles Cover
-            img.src = playlist[currentSongIndex].cover;
-            
-            overlay.classList.add('active');
-        }
-
-        function closeFullCover() {
-            document.getElementById('fullCoverOverlay').classList.remove('active');
-        }
-        
-        // Schließen bei Scrollen
-        document.getElementById('fullCoverOverlay').addEventListener('touchmove', closeFullCover);
-
+        function togglePlaylist() { playlistPopup.classList.toggle("show"); }
 
         function renderPlaylist() {
             playlistContainer.innerHTML = "";
@@ -578,49 +635,11 @@
             });
         }
 
-        function loadSong(index) {
-            currentSongIndex = index;
-            if (index < 0) currentSongIndex = playlist.length - 1;
-            if (index >= playlist.length) currentSongIndex = 0;
-            audio.src = playlist[currentSongIndex].src;
-            songTitle.innerText = playlist[currentSongIndex].title;
-            coverArt.src = playlist[currentSongIndex].cover;
-            coverArt.onerror = function() { this.src = 'https://via.placeholder.com/40/333/fff?text=MP3'; };
-            renderPlaylist();
-        }
-
         function downloadCurrentSong() {
             const link = document.createElement('a');
             link.href = playlist[currentSongIndex].src;
             link.download = playlist[currentSongIndex].title + ".mp3";
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        }
-
-        function updatePlayIcon(isPlaying) {
-            if(isPlaying) {
-                playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-                playBtn.classList.add('playing');
-            } else {
-                playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-                playBtn.classList.remove('playing');
-            }
-        }
-
-        function togglePlay() { if (audio.paused) { audio.play(); updatePlayIcon(true); } else { audio.pause(); updatePlayIcon(false); } }
-        function nextSong() { currentSongIndex++; loadSong(currentSongIndex); audio.play(); updatePlayIcon(true); }
-        function prevSong() { currentSongIndex--; loadSong(currentSongIndex); audio.play(); updatePlayIcon(true); }
-        function togglePlaylist() { playlistPopup.classList.toggle("show"); }
-
-        function toggleAlwaysOn() {
-            isAlwaysOn = !isAlwaysOn;
-            const btn = document.getElementById('alwaysOnBtn');
-            if(isAlwaysOn) {
-                btn.classList.add('always-on-active');
-                showToast("Always On: AKTIV ♾️", "🎵");
-            } else {
-                btn.classList.remove('always-on-active');
-                showToast("Always On: AUS", "⏸");
-            }
         }
 
         audio.addEventListener('timeupdate', () => {
@@ -632,40 +651,30 @@
         seekSlider.addEventListener('input', () => { audio.currentTime = (seekSlider.value * audio.duration) / 100; progressFill.style.width = seekSlider.value + "%"; });
         audio.addEventListener('ended', nextSong);
 
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                if (!isAlwaysOn) {
-                    if (!audio.paused) { wasPlayingBeforeHide = true; audio.pause(); updatePlayIcon(false); }
-                    else { wasPlayingBeforeHide = false; }
-                }
-            } else {
-                if (wasPlayingBeforeHide && !isAlwaysOn) { audio.play().catch(()=>{}); updatePlayIcon(true); }
-            }
-        });
-
         function sendTelegram() {
             const inp = document.getElementById('chatMsg');
             if (inp.value.trim() === "") return;
             document.getElementById('chatStatus').innerText = "Sende...";
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("Nachricht: " + inp.value)}`)
-                .then(()=>{ document.getElementById('chatStatus').innerText="Gesendet!"; inp.value=""; });
+            sendTelegramChat("Nachricht: " + inp.value);
+            document.getElementById('chatStatus').innerText="Gesendet!"; inp.value="";
         }
 
         function triggerYeah() {
             document.getElementById('celebration').classList.add('active');
             setTimeout(() => document.getElementById('celebration').classList.remove('active'), 3000);
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("Alex hat das Geschenk angenommen! 🎉")}`).catch(()=>{});
+            sendTelegramChat("Alex hat das Geschenk angenommen! 🎉");
         }
 
         window.addEventListener('load', function() {
             renderPlaylist(); renderDownloadList(); loadSong(0);
             
-            // HINWEIS FÜR ALWAYS ON STARTEN
+            // HINWEIS FÜR ALWAYS ON
             setTimeout(() => {
                 const hint = document.getElementById('alwaysOnHint');
-                hint.classList.add('visible');
-                // Nach 5 Sek ausblenden
-                setTimeout(() => hint.classList.remove('visible'), 5000);
+                if(hint) {
+                    hint.classList.add('visible');
+                    setTimeout(() => hint.classList.remove('visible'), 5000);
+                }
             }, 3000);
 
             var startAudio = function() {
